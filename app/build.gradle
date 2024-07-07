@@ -46,4 +46,5 @@ dependencies {
     testImplementation("io.github.bonigarcia:webdrivermanager:${wdmVersion}")
 
     testImplementation project(":lib")
+    implementation project(":lib")
 }

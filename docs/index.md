@@ -400,6 +400,66 @@ If your project has a unique directory tree (not a Maven/Gradle project), you ca
 
 [source](https://github.com/kazurayam/unittest-helper/blob/develop/app/src/test/java/com/kazurayam/unittesthelperdemo/ExampleA4Test.java)
 
+### Example-A5 Want to resolve the project directory via classpath of a class under the "build/classes/java/main" directory
+
+As shown in the Example-A2, the `ProjectDirectoryResolver` knows the `build/classes/java/test/` as a registered "Code Source Path Element under project directory" as default. But it does not know the `build/classes/java/main/`. Now I want to resolve the project directory via classpath of my `build/classes/java/main/com/example/App.class`. How can I do it?
+
+Yes, you can do it. See the following code example.
+
+Please find how the `CodeSourcePathELementsUnderProjectDirectory` class is used in the `com.example.App` class.
+
+    package com.example;
+
+    import com.kazurayam.unittest.CodeSourcePathElementsUnderProjectDirectory;
+    import com.kazurayam.unittest.TestOutputOrganizer;
+
+    import java.io.IOException;
+    import java.nio.file.Path;
+    import java.nio.file.Files;
+
+    public class App {
+
+        private static TestOutputOrganizer too =
+                new TestOutputOrganizer.Builder(App.class)
+                        .addCodeSourcePathElementsUnderProjectDirectory(
+                                new CodeSourcePathElementsUnderProjectDirectory(
+                                        "build", "classes", "java", "main"))
+                        .subOutputDirectory(App.class)
+                        .build();
+
+        public Path sayHelloTo(String name) throws IOException {
+            Path outputDirectory = too.cleanClassOutputDirectory();
+            Path output = outputDirectory.resolve("greeting.txt");
+            Files.writeString(output, "Hello, " + name + "!");
+            return output;
+        }
+    }
+
+[source](https://github.com/kazurayam/unittest-helper/blob/develop/app/src/main/java/com/example/App.java)
+
+    package com.kazurayam.unittesthelperdemo;
+
+    import com.example.App;
+    import org.junit.jupiter.api.Test;
+
+    import java.io.IOException;
+    import java.nio.file.Files;
+    import java.nio.file.Path;
+
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class ExampleA5Test {
+
+        @Test
+        public void test_com_example_App() throws IOException {
+            App app = new App();
+            Path output = app.sayHelloTo("William Tell");
+            assertTrue(Files.exists(output));
+        }
+    }
+
+[source](https://github.com/kazurayam/unittest-helper/blob/develop/app/src/test/java/com/kazurayam/unittesthelperdemo/ExampleA5Test.java)
+
 ### Example-B1 Locating the default output directory
 
 I want to create a directory named `test-output` under the project directory. I would let my test classes to write files into the directory. I want to for output files `test-output` directory by calling `getOutputDir()`.

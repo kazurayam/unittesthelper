@@ -1,0 +1,20 @@
+=== Example-A5 Want to resolve the project directory via classpath of a class under the "build/classes/java/main" directory
+
+As shown in the Example-A2, the `ProjectDirectoryResolver` knows  the `build/classes/java/test/` as a registered "Code Source Path Element under project directory" as default. But it does not know the `build/classes/java/main/`. Now I want to resolve the project directory via classpath of my `build/classes/java/main/com/example/App.class`. How can I do it?
+
+Yes, you can do it. See the following code example.
+
+Please find how the `CodeSourcePathELementsUnderProjectDirectory` class is used in the `com.example.App` class.
+
+[source, java]
+----
+include::../app/src/main/java/com/example/App.java[]
+----
+link:https://github.com/kazurayam/unittest-helper/blob/develop/app/src/main/java/com/example/App.java[source]
+
+[source, java]
+----
+include::../app/src/test/java/com/kazurayam/unittesthelperdemo/ExampleA5Test.java[]
+----
+link:https://github.com/kazurayam/unittest-helper/blob/develop/app/src/test/java/com/kazurayam/unittesthelperdemo/ExampleA5Test.java[source]
+
