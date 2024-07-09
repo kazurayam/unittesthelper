@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.kazurayam'
-version '0.5.0'
+version '0.5.1'
 
 ext {
     isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -71,8 +71,7 @@ repositories {
 }
 
 ext {
-    slf4jVersion  = "2.0.9"
-    logbackVersion  = "1.4.14"
+    slf4jVersion  = "2.0.13"
 
     junit5Version = "5.10.0"
     assertjVersion = "3.24.2"
@@ -82,14 +81,14 @@ ext {
 
 dependencies {
     implementation("org.slf4j:slf4j-api:${slf4jVersion}")
-    implementation("ch.qos.logback:logback-classic:${logbackVersion}")
+    testRuntimeOnly("org.slf4j:slf4j-simple:${slf4jVersion}")
 
     testImplementation("org.junit.jupiter:junit-jupiter:${junit5Version}")
     testImplementation("org.assertj:assertj-core:${assertjVersion}")
     testImplementation("org.testng:testng:${testngVersion}")
 
     functionalTestImplementation("org.slf4j:slf4j-api:${slf4jVersion}")
-    functionalTestImplementation("org.slf4j:slf4j-simple:${slf4jVersion}")
+    functionalTestRuntimeOnly("org.slf4j:slf4j-simple:${slf4jVersion}")
     functionalTestImplementation("org.junit.jupiter:junit-jupiter:${junit5Version}")
     functionalTestImplementation("org.assertj:assertj-core:${assertjVersion}")
 }
