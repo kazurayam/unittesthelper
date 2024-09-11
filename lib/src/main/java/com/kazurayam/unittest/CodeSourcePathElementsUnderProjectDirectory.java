@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -47,6 +48,7 @@ public final class CodeSourcePathElementsUnderProjectDirectory {
     public static CodeSourcePathElementsUnderProjectDirectory MAVEN_TEST =
             new CodeSourcePathElementsUnderProjectDirectory(
                     "target", "test-classes");
+
     public static CodeSourcePathElementsUnderProjectDirectory GRADLE_JAVA_TEST =
             new CodeSourcePathElementsUnderProjectDirectory(
                     "build", "classes", "java", "test");
@@ -54,6 +56,10 @@ public final class CodeSourcePathElementsUnderProjectDirectory {
     public static CodeSourcePathElementsUnderProjectDirectory GRADLE_JAVA_FUNCTIONALTEST =
             new CodeSourcePathElementsUnderProjectDirectory(
                     "build", "classes", "java", "functionalTest");
+
+    public static CodeSourcePathElementsUnderProjectDirectory GRADLE_JAVA_MAIN =
+            new CodeSourcePathElementsUnderProjectDirectory(
+                    "build", "classes", "java", "main");
 
     public static CodeSourcePathElementsUnderProjectDirectory GRADLE_GROOVY_TEST =
             new CodeSourcePathElementsUnderProjectDirectory(
@@ -63,6 +69,10 @@ public final class CodeSourcePathElementsUnderProjectDirectory {
             new CodeSourcePathElementsUnderProjectDirectory(
                     "build", "classes", "groovy", "functionalTest");
 
+    public static CodeSourcePathElementsUnderProjectDirectory GRADLE_GROOVY_MAIN =
+            new CodeSourcePathElementsUnderProjectDirectory(
+                    "build", "classes", "groovy", "main");
+
     public static CodeSourcePathElementsUnderProjectDirectory GRADLE_KOTLIN_TEST =
             new CodeSourcePathElementsUnderProjectDirectory(
                     "build", "classes", "kotlin", "test");
@@ -71,11 +81,33 @@ public final class CodeSourcePathElementsUnderProjectDirectory {
             new CodeSourcePathElementsUnderProjectDirectory(
                     "build", "classes", "kotlin", "functionalTest");
 
+    public static CodeSourcePathElementsUnderProjectDirectory GRADLE_KOTLIN_MAIN =
+            new CodeSourcePathElementsUnderProjectDirectory(
+                    "build", "classes", "kotlin", "main");
+
+    public static CodeSourcePathElementsUnderProjectDirectory IDEA_PRODUCTION =
+            new CodeSourcePathElementsUnderProjectDirectory(
+                    "out", "production", "classes");
+
+    public static CodeSourcePathElementsUnderProjectDirectory IDEA_TEST =
+            new CodeSourcePathElementsUnderProjectDirectory(
+                    "out", "test", "classes");
 
     private List<String> cspeupdStringList = new ArrayList<>();
 
     public CodeSourcePathElementsUnderProjectDirectory(List<String> cspeupdStringList) {
         this.cspeupdStringList = cspeupdStringList;
+    }
+
+    public CodeSourcePathElementsUnderProjectDirectory(Path cspeupd) {
+        if (cspeupd.isAbsolute()) {
+            throw new IllegalArgumentException("cspeupd is absolute");
+        }
+        List<String> list = new ArrayList<>();
+        for (Path element : cspeupd) {
+            list.add(element.toString());
+        }
+        this.cspeupdStringList = list;
     }
 
     public CodeSourcePathElementsUnderProjectDirectory(String pathElement, String... more) {

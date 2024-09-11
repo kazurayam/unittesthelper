@@ -52,10 +52,15 @@ public final class ProjectDirectoryResolver {
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.MAVEN_TEST);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_JAVA_TEST);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_JAVA_FUNCTIONALTEST);
+        listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_JAVA_MAIN);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_GROOVY_TEST);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_GROOVY_FUNCTIONALTEST);
+        listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_GROOVY_MAIN);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_KOTLIN_TEST);
         listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_KOTLIN_FUNCTIONALTEST);
+        listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.GRADLE_KOTLIN_MAIN);
+        listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.IDEA_PRODUCTION);
+        listOfCSPEUPD.add(CodeSourcePathElementsUnderProjectDirectory.IDEA_TEST);
     }
 
     /**
@@ -149,6 +154,7 @@ public final class ProjectDirectoryResolver {
         logger.trace(String.format("[%s] nameElements=%s", methodName, nameElements));
         StringSequence ss = new StringSequence(nameElements);
         int boundary = -1;
+        StringBuilder sb = new StringBuilder();
         for (CodeSourcePathElementsUnderProjectDirectory cspe : this.listOfCSPEUPD) {
             int indexOfBuildDir = ss.indexOf(cspe);
             if (indexOfBuildDir > 0) {
@@ -164,10 +170,13 @@ public final class ProjectDirectoryResolver {
                         methodName,
                         cspe, ss));
             }
+            sb.append(cspe.toString());
+            sb.append("\n");
         }
         if (boundary == -1) {
             throw new IllegalStateException(String.format(
-                    "[%s] unable to resolve the project directory via classpath", methodName));
+                    "[%s] unable to resolve the project directory via classpath. Tried the following CodeSourcePathElement candidates:\n%s",
+                    methodName, sb));
         }
         // build the project dir to return as the result
         Path w = root;
